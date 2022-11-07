@@ -1,0 +1,56 @@
+<script>
+    import "../app.css"
+    import { onMount } from "svelte";
+
+    let menuDiv;
+
+    function toggleMenu() {
+        let mobileMenuDisplay = menuDiv.style.display;
+        if (mobileMenuDisplay === 'none') {
+            menuDiv.style.display = 'block';
+        }
+        else {
+            menuDiv.style.display = 'none';
+        }
+    }
+    // Media match query handler
+    const mediaQueryHandler1 = e => {
+        // Reset mobile state
+        if (!e.matches) {
+            menuDiv.style.display = 'block';
+        }
+    };
+
+    const mediaQueryHandler2 = e => {
+        // Reset mobile state
+        if (!e.matches) {
+            menuDiv.style.display = 'none';
+        }
+    };
+
+    // Attach media query listener on mount hook
+    onMount(() => {
+        const mediaListener1 = window.matchMedia("(max-width: 767px)");
+        mediaListener1.addListener(mediaQueryHandler1);
+        const mediaListener2 = window.matchMedia("(min-width: 767px)");
+        mediaListener2.addListener(mediaQueryHandler2);
+    });
+</script>
+
+<nav>
+    <div class="block md:hidden hover:cursor-pointer px-3 py-2" on:click={toggleMenu}>
+        <div class="my-1 w-6 h-1 bg-black"></div>
+        <div class="my-1 w-6 h-1 bg-black"></div>
+        <div class="my-1 w-6 h-1 bg-black"></div>
+    </div>
+
+    <div bind:this={menuDiv} class="hidden md:block">
+        <ul class="md:flex justify-end block">
+            <li class="px-3 py-1"><a href="#">Home</a></li>
+            <li class="px-3 py-1"><a href="#">Current Edition</a></li>
+            <li class="px-3 py-1"><a href="#">Previous Edition</a></li>
+        </ul>
+    </div>
+    
+</nav> 
+<slot />
